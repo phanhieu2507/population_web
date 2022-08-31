@@ -67,7 +67,7 @@ const Population = () => {
   };
   const xaxis = () => {
     const data = [...Array(48).keys()];
-    const data2 = data.slice(2, 48).map((item) => {
+    const data2 = data.slice(2, 48)?.map((item) => {
       return <XAxis dataKey="year" xAxisId={item.toString()} hide={true} />;
     });
 
@@ -75,10 +75,10 @@ const Population = () => {
   };
   const yaxis = () => {
     const data = [...Array(48).keys()];
-    const data2 = data.slice(1, 48).map((item) => {
+    const data2 = data.slice(1, 48)?.map((item) => {
       return (
         <Line
-          name={JSON.parse(localStorage.getItem('cityname'))[item-1].prefName}
+          name={JSON.parse(localStorage.getItem('cityname'))[item-1]?.prefName}
           data={JSON.parse(localStorage.getItem(item.toString()))}
           dataKey="value"
           stroke="#8884d8"
