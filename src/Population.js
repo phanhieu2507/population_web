@@ -11,6 +11,8 @@ import {
 } from "recharts";
 import "./index.css"
 const Population = () => {
+  const [name,setName]  = useState('0');
+  const [linedata,setLineData]=useState([0]);
   const [cityName, setCityName] = useState([]);
   const [cityChoosed, setcityChoosed] = useState([]);
   useEffect(() => {
@@ -40,7 +42,7 @@ const Population = () => {
     }
   };
   const cityList = () => {
-    const citytable = cityName.map((item) => {
+    const citytable = cityName?.map((item) => {
       return (
         <div>
           <input
@@ -75,11 +77,13 @@ const Population = () => {
   };
   const yaxis = () => {
     const data = [...Array(48).keys()];
-    const data2 = data.slice(1, 48)?.map((item) => {
+    const data2 = data.slice(1, 48).map((item) => {
+      setName(JSON.parse(localStorage.getItem('cityname'))[item-1]?.prefName)
+      setLineData(JSON.parse(localStorage.getItem(item.toString())))
       return (
         <Line
-          name={JSON.parse(localStorage.getItem('cityname'))[item-1]?.prefName}
-          data={JSON.parse(localStorage.getItem(item.toString()))}
+          name={name}
+          data={linedata}
           dataKey="value"
           stroke="#8884d8"
           activeDot={{ r: 10 }}
