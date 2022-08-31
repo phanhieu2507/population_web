@@ -15,12 +15,13 @@ const Population = () => {
   const [linedata,setLineData]=useState([0]);
   const [cityName, setCityName] = useState([]);
   const [cityChoosed, setcityChoosed] = useState([]);
+  const [isLoading,setisLoading]=useState(true)
   useEffect(() => {
     const getCity = async () => {
       const response = await axios.get(`v1/prefectures`);
-      localStorage.clear();
-      setCityName(response.data.result);
-      localStorage.setItem('cityname',JSON.stringify(response.data.result));
+      await localStorage.clear();
+      await setCityName(response.data.result);
+      await localStorage.setItem('cityname',JSON.stringify(response.data.result));
       for (let i = 1; i < 48; i++) {
         await axios
           .get(`v1/population/composition/perYear?cityCode=-&prefCode=${i}`)
@@ -31,6 +32,7 @@ const Population = () => {
             );
           });
       }
+      await setisLoading(false)
     };
     getCity();
   }, []);
@@ -78,18 +80,21 @@ const Population = () => {
   const yaxis = () => {
     const data = [...Array(48).keys()];
     const data2 = data.slice(1, 48).map((item) => {
-      if(JSON.parse(localStorage.getItem('cityname'))[item-1]?.prefName&&JSON.parse(localStorage.getItem(item.toString()))){
+      if(isLoading){
+      return (
+       null
+      );}
       return (
         <Line
-          name={JSON.parse(localStorage.getItem('cityname'))[item-1]?.prefName}
-          data={JSON.parse(localStorage.getItem(item.toString()))}
-          dataKey="value"
-          stroke="#8884d8"
-          activeDot={{ r: 10 }}
-          xAxisId={item.toString()}
-          hide={!cityChoosed.includes(item.toString())}
-        />
-      );}
+        name={JSON.parse(localStorage.getItem('cityname'))[item-1]?.prefName}
+        data={JSON.parse(localStorage.getItem(item.toString()))}
+        dataKey="value"
+        stroke="#8884d8"
+        activeDot={{ r: 10 }}
+        xAxisId={item.toString()}
+        hide={!cityChoosed.includes(item.toString())}
+      />
+      )
     });
     return data2;
   };
