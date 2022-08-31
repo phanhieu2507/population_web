@@ -78,19 +78,18 @@ const Population = () => {
   const yaxis = () => {
     const data = [...Array(48).keys()];
     const data2 = data.slice(1, 48).map((item) => {
-      setName(JSON.parse(localStorage.getItem('cityname'))[item-1]?.prefName)
-      setLineData(JSON.parse(localStorage.getItem(item.toString())))
+      if(JSON.parse(localStorage.getItem('cityname'))[item-1]?.prefName&&JSON.parse(localStorage.getItem(item.toString()))){
       return (
         <Line
-          name={name}
-          data={linedata}
+          name={JSON.parse(localStorage.getItem('cityname'))[item-1]?.prefName}
+          data={JSON.parse(localStorage.getItem(item.toString()))}
           dataKey="value"
           stroke="#8884d8"
           activeDot={{ r: 10 }}
           xAxisId={item.toString()}
           hide={!cityChoosed.includes(item.toString())}
         />
-      );
+      );}
     });
     return data2;
   };
